@@ -13,7 +13,7 @@ root.title("Katro")
 dif = [2*i+1 for i in range(size)]
 rel = [i+dif[len(dif)-1-i] if i<size else i-dif[i-len(dif)] for i in range(size*2)]
 
-def initialize(s, p):
+def initializeBoard(s, p):
     return [['*' for j in range(p)] for i in range(s*2)]
 
 def count_pioners(p):
@@ -32,19 +32,32 @@ def step1(p, o, id, widget_p, isComputer, counter=0):
         name_widget_p = ''.join(widget_p.split('_')[:-1]) + '_' + str(id)
         root.nametowidget(name_widget_p).clear()
         root.after(animation_delai, step2, p, o, id+1, e, widget_p, isComputer, counter)
+        root.nametowidget('.player.player_score').config(text=f"Points: {count_pioners(player)}")
+        root.nametowidget('.computer.computer_score').config(text=f"Points: {count_pioners(computer)}")
 
     elif count_pioners(o)==0 and isComputer:
-        root.nametowidget('.result').config(text="Computer win!")
+        root.nametowidget('.indication').config(text="Computer win!")
+        root.nametowidget('.popup').place_configure(relheight=0.4, relwidth=0.9)
+        root.nametowidget('.popup.result').config(text="Computer win!")
 
     elif count_pioners(o)==0 and not isComputer:
-        root.nametowidget('.result').config(text="Player win!")
+        root.nametowidget('.indication').config(text="Player win!")
+        root.nametowidget('.popup').place_configure(relheight=0.4, relwidth=0.9)
+        root.nametowidget('.popup.result').config(text="Player win!")
 
     elif temp!=0 and not isComputer and count_pioners(p)!=0:
+        # update UI
+        root.nametowidget('.player').configure(highlightbackground="black", highlightcolor="black")
+        root.nametowidget('.computer').configure(highlightbackground="red", highlightcolor="red")
+        root.nametowidget('.indication').config(text=f"Computer chose id: {id+1}")
+
         id = minimax(profondeur, True, o, p)
-        root.nametowidget('.result').config(text=f"Computer chose id: {id+1}")
         step1(o, p, id, '.computer.computer_'+str(id), True)
     else:
-        root.nametowidget('.result').config(text="Your Turn!")
+        # update UI
+        root.nametowidget('.indication').config(text="Your Turn!")
+        root.nametowidget('.player').configure(highlightbackground="blue", highlightcolor="blue")
+        root.nametowidget('.computer').configure(highlightbackground="black", highlightcolor="black")
         
 
 
@@ -91,6 +104,8 @@ def step3(p, o, id, widget_p, isComputer, counter):
             root.nametowidget(name_widget_o).clear()
             root.after(animation_delai, root.nametowidget(name_widget_p).add_element(e_o))
     
+    root.nametowidget('.player.player_score').config(text=f"Points: {count_pioners(player)}")
+    root.nametowidget('.computer.computer_score').config(text=f"Points: {count_pioners(computer)}")
     root.after(animation_delai, step1, p, o, id, widget_p, isComputer, counter)
             
 
@@ -168,8 +183,13 @@ def minimax(pr, estMax, p, o):
 
 
 # initialization
-player = initialize(size, piece)
-computer = initialize(size, piece)
+def initialization():
+    global player
+    global computer
+    player = initializeBoard(size, piece)
+    computer = initializeBoard(size, piece)
+
+initialization()
 
 
 def start(widget):

@@ -2,7 +2,7 @@ from algo import *
 
 class CircleButton(tk.Canvas):
     def __init__(self, parent, color, name, bg, text=2,radius=40):
-        super().__init__(parent, width=radius*2, height=radius*2, bd=0, highlightthickness=0, name=name, bg=bg)
+        super().__init__(parent, width=radius*2, height=radius*2, bd=0, highlightthickness=0, name=name, bg=bg, cursor="hand2")
         self.color = color
         self.parent = parent
         self.oval_id =self.create_oval(0, 0, radius*2, radius*2, fill=self.color, outline=self.color)
