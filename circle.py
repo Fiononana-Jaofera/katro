@@ -11,6 +11,7 @@ class CircleButton(tk.Canvas):
         self.bind("<ButtonRelease-1>", self.on_button_release)
 
     def update_text(self, new_text):
+        global root
         self.itemconfig(self.text_id, text=new_text)
 
     def get_element(self):

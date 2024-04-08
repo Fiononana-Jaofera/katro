@@ -5,7 +5,7 @@ import tkinter as tk
 size = 3
 piece = 2
 profondeur = 4
-animation_delai = 500
+animation_delai = 600
 root = tk.Tk()
 root.title("Katro")
 
@@ -30,10 +30,15 @@ def step1(p, o, id, widget_p, isComputer, counter=0):
 
         # update interface
         name_widget_p = ''.join(widget_p.split('_')[:-1]) + '_' + str(id)
+        ################################################################
+        widget = root.nametowidget(name_widget_p)
+        widget.itemconfig(widget.oval_id, fill="white")
+        widget.itemconfig(widget.text_id, fill=widget.color)
+        ################################################################
         root.nametowidget(name_widget_p).clear()
-        root.after(animation_delai, step2, p, o, id+1, e, widget_p, isComputer, counter)
         root.nametowidget('.player.player_score').config(text=f"Points: {count_pioners(player)}")
         root.nametowidget('.computer.computer_score').config(text=f"Points: {count_pioners(computer)}")
+        root.after(animation_delai, step2, p, o, id+1, e, name_widget_p, isComputer, counter)
 
     elif count_pioners(o)==0 and isComputer:
         root.nametowidget('.indication').config(text="Computer win!")
@@ -68,18 +73,36 @@ def step2(p, o, id, e, widget_p, isComputer, counter):
     p[id] += '*'
     e -= 1
 
+    ################################################################
+    widget = root.nametowidget(widget_p)
+    widget.itemconfig(widget.oval_id, fill=widget.color)
+    widget.itemconfig(widget.text_id, fill="white")
+    ################################################################
+
     # update interface
     name_widget_p = ''.join(widget_p.split('_')[:-1]) + '_' + str(id)
+
+    ################################################################
+    widget = root.nametowidget(name_widget_p)
+    widget.itemconfig(widget.oval_id, fill="white")
+    widget.itemconfig(widget.text_id, fill=widget.color)
+    ################################################################
+
     root.nametowidget(name_widget_p).add_element()
     root.nametowidget('.player.player_score').config(text=f"Points: {count_pioners(player)}")
     root.nametowidget('.computer.computer_score').config(text=f"Points: {count_pioners(computer)}")
 
     if e>0:
-        root.after(animation_delai, step2, p, o, id+1, e, widget_p, isComputer, counter)
+        root.after(animation_delai, step2, p, o, id+1, e, name_widget_p, isComputer, counter)
     else:
-        root.after(animation_delai, step3, p, o, id, widget_p, isComputer, counter)
+        root.after(animation_delai, step3, p, o, id, name_widget_p, isComputer, counter)
 
 def step3(p, o, id, widget_p, isComputer, counter):
+    ################################################################
+    widget = root.nametowidget(widget_p)
+    widget.itemconfig(widget.oval_id, fill=widget.color)
+    widget.itemconfig(widget.text_id, fill="white")
+    ################################################################
     widget_o = '.player.player_' if isComputer else '.computer.computer_'
     if ((not isComputer and id in range(size, size*2)) or (isComputer and id in range(size))) and len(p[id])>1:
         if o[ rel[id] ] != []:
@@ -91,7 +114,20 @@ def step3(p, o, id, widget_p, isComputer, counter):
             name_widget_o = widget_o + str(rel[id])
             e_o = root.nametowidget(name_widget_o).get_element()
             root.nametowidget(name_widget_o).clear()
+
+            ################################################################
+            widget = root.nametowidget(name_widget_o)
+            widget.itemconfig(widget.oval_id, fill="black")
+            widget.itemconfig(widget.text_id, fill=widget.color)
+            ################################################################
+
             root.after(animation_delai, root.nametowidget(name_widget_p).add_element(e_o))
+
+            ################################################################
+            widget = root.nametowidget(name_widget_p)
+            widget.itemconfig(widget.oval_id, fill="white")
+            widget.itemconfig(widget.text_id, fill=widget.color)
+            ################################################################
         
         elif (not isComputer and o[:size] == [[] for i in range(size)]) or (isComputer and o[size:size*2] == [[] for i in range(size)]) and o[id] != []:
             p[id] += o[id]
@@ -102,7 +138,17 @@ def step3(p, o, id, widget_p, isComputer, counter):
             name_widget_o = widget_o + str(id)
             e_o = root.nametowidget(name_widget_o).get_element()
             root.nametowidget(name_widget_o).clear()
+            ################################################################
+            widget = root.nametowidget(name_widget_o)
+            widget.itemconfig(widget.oval_id, fill="black")
+            widget.itemconfig(widget.text_id, fill=widget.color)
+            ################################################################
             root.after(animation_delai, root.nametowidget(name_widget_p).add_element(e_o))
+            ################################################################
+            widget = root.nametowidget(name_widget_p)
+            widget.itemconfig(widget.oval_id, fill="white")
+            widget.itemconfig(widget.text_id, fill=widget.color)
+            ################################################################
     
     root.nametowidget('.player.player_score').config(text=f"Points: {count_pioners(player)}")
     root.nametowidget('.computer.computer_score').config(text=f"Points: {count_pioners(computer)}")
