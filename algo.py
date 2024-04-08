@@ -1,6 +1,5 @@
 import copy
 import tkinter as tk
-import asyncio
 
 # params
 size = 3
@@ -8,7 +7,6 @@ piece = 2
 profondeur = 4
 root = tk.Tk()
 animation_delai = 500
-id_computer = 0
 
 # build relation
 dif = [2*i+1 for i in range(size)]
@@ -35,18 +33,18 @@ def step1(p, o, id, widget_p, isComputer, counter=0):
         root.after(animation_delai, step2, p, o, id+1, e, widget_p, isComputer, counter)
 
     elif count_pioners(o)==0 and isComputer:
-        print('computer win!')
+        root.nametowidget('.result').config(text="Computer win!")
 
     elif count_pioners(o)==0 and not isComputer:
-        print('gg! you win!')
+        root.nametowidget('.result').config(text="Player win!")
 
     elif temp!=0 and not isComputer and count_pioners(p)!=0:
         id = minimax(profondeur, True, o, p)
-        print('Computer chose id: ', (id+1))
+        root.nametowidget('.result').config(text=f"Computer chose id: {id+1}")
         step1(o, p, id, '.computer.computer_'+str(id), True)
-
     else:
-        print('your turn!')
+        root.nametowidget('.result').config(text="Your Turn!")
+        
 
 
 def step2(p, o, id, e, widget_p, isComputer, counter):
@@ -59,6 +57,8 @@ def step2(p, o, id, e, widget_p, isComputer, counter):
     # update interface
     name_widget_p = ''.join(widget_p.split('_')[:-1]) + '_' + str(id)
     root.nametowidget(name_widget_p).add_element()
+    root.nametowidget('.player.player_score').config(text=f"Points: {count_pioners(player)}")
+    root.nametowidget('.computer.computer_score').config(text=f"Points: {count_pioners(computer)}")
 
     if e>0:
         root.after(animation_delai, step2, p, o, id+1, e, widget_p, isComputer, counter)
@@ -89,7 +89,7 @@ def step3(p, o, id, widget_p, isComputer, counter):
             e_o = root.nametowidget(name_widget_o).get_element()
             root.nametowidget(name_widget_o).clear()
             root.after(animation_delai, root.nametowidget(name_widget_p).add_element(e_o))
-
+    
     root.after(animation_delai, step1, p, o, id, widget_p, isComputer, counter)
             
 
@@ -174,18 +174,5 @@ computer = initialize(size, piece)
 def start(widget):
     global computer
     global player
-
     id = int(widget.split('_')[-1])
     step1(player, computer, id, '.player.player_'+str(id), False)
-    # if computer == [[] for i in range(size*2)]:
-    #     print('player win')
-    #     return
-
-    # print('Computer chose id: ', (id))
-    # step1(computer, player, id, '.computer.computer_'+str(id), True)
-
-    # if player == [[] for i in range(size*2)]:
-    #     print('computer win')
-
-    # print(player)
-    # print(computer)
