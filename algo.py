@@ -5,8 +5,9 @@ import tkinter as tk
 size = 3
 piece = 2
 profondeur = 4
-root = tk.Tk()
 animation_delai = 500
+root = tk.Tk()
+root.title("Katro")
 
 # build relation
 dif = [2*i+1 for i in range(size)]

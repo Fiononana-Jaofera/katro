@@ -12,7 +12,7 @@ player_score_label.grid(row=0, column=size-1)
 for i in range(2):
     for j in range(size):
         circle = CircleButton(player_container, color="blue", name=f"player_{i*size + j}", text=piece, bg=background_color)
-        circle.grid(row=i+1, column=j if i==0 else i*size-j-1, padx=pad/2, pady=pad/2)
+        circle.grid(row=i+1, column=j if i==0 else i*size-j-1, padx=pad, pady=pad)
 
 computer_container = tk.Frame(root, name='computer', bg=background_color, padx=pad, pady=pad)
 computer_container.grid(pady=pad/2)
@@ -23,10 +23,9 @@ computer_score_label.grid(row=0, column=size-1)
 for i in range(2):
     for j in range(size):
         circle = CircleButton(computer_container, color="red", name=f"computer_{i*size + j}", text=piece, bg=background_color)
-        circle.grid(row=i+1, column=j if i==0 else i*size-j-1, padx=pad/2, pady=pad/2)
+        circle.grid(row=i+1, column=j if i==0 else i*size-j-1, padx=pad, pady=pad)
 
 result_label = tk.Label(root, text="", name="result", bg="black", foreground="White", width=50)
 result_label.grid()
-print(result_label)
 
 root.mainloop()
